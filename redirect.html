@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+<meta charset="UTF-8">
+<title>Redirecting...</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{background:#0b1020;color:#fff;font-family:'Noto Sans Sinhala',Arial;text-align:center;padding-top:25vh;margin:0;}
+.box{max-width:320px;margin:0 auto;background:rgba(255,255,255,0.05);padding:30px;border-radius:16px;border:1px solid rgba(212,175,55,0.3);}
+h2{color:#ffd700;margin-bottom:10px;font-size:20px;}
+#count{font-size:48px;color:#25D366;font-weight:700;display:block;margin:10px 0;}
+p{color:#aaa;font-size:14px;margin:5px 0;}
+.copied{color:#25D366;font-size:12px;margin-top:10px;display:none;}
+</style>
+</head>
+<body>
+<div class="box">
+  <h2>Your Card Is Ready ✅</h2>
+  <span id="count">3</span>
+  <p>WhatsApp Open In...</p>
+  <p class="copied" id="copiedMsg">Link Is Copy ✅</p>
+</div>
+<script>
+const params = new URLSearchParams(window.location.search);
+const monetag = params.get('to');
+const shareUrl = params.get('share');
+const shareText = `2026 | පොසොන් ආශිර්වාදය  \n\n${shareUrl}\n\nYou Can Try`;
+
+// 1. Page Load වෙද්දීම Copy කරනවා
+navigator.clipboard.writeText(shareText).then(() => {
+  document.getElementById('copiedMsg').style.display = 'block';
+}).catch(err => { console.log('Copy failed', err); });
+
+let i = 3;
+const timer = setInterval(() => {
+  document.getElementById('count').textContent = i;
+  if(i === 0) {
+    clearInterval(timer);
+    // 2. Monetag Ad Fire
+    window.location.href = monetag;
+    // 3. 0.8 sec පස්සේ WhatsApp Open
+    setTimeout(() => {
+      window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`,'_blank');
+    }, 800);
+  }
+  i--;
+}, 1000);
+</script>
+</body>
+</html>
